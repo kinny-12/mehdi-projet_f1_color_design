@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mehdi Color Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue-900: #0a1628;
+    --blue-800: #0d1f3c;
+    --blue-700: #112952;
+    --blue-600: #1a3a6b;
+    --blue-500: #1e4d8c;
+    --blue-400: #2563b0;
+    --blue-300: #3b82f6;
+    --blue-200: #93c5fd;
+    --blue-100: #dbeafe;
+    --accent: #38bdf8;
+    --accent2: #06b6d4;
+    --white: #ffffff;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.4);
+    --shadow-md: 0 8px 30px rgba(0,0,0,0.25);
+    --shadow-sm: 0 4px 15px rgba(0,0,0,0.15);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 40%, #0f2744 100%);
+    min-height: 100vh;
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ---- BACKGROUND DECORATIONS ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(37,99,176,0.25) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; left: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 48px 24px 36px;
+  }
+  .logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .logo-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--blue-300), var(--accent));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 30px rgba(59,130,246,0.5);
+  }
+  .logo-icon svg { width: 28px; height: 28px; fill: white; }
+  header h1 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--white) 30%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+  header p {
+    color: var(--blue-200);
+    font-size: 1rem;
+    font-weight: 400;
+    margin-top: 6px;
+    opacity: 0.85;
+  }
+
+  /* ---- TABS ---- */
+  .tabs-container {
+    position: relative; z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 24px 32px;
+  }
+  .tab-btn {
+    padding: 12px 32px;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    background: rgba(255,255,255,0.05);
+    color: var(--blue-200);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    letter-spacing: 0.3px;
+  }
+  .tab-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-color: rgba(59,130,246,0.4);
+  }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--blue-500), var(--blue-400));
+    color: white;
+    border-color: var(--blue-300);
+    box-shadow: 0 0 25px rgba(37,99,176,0.6), 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  /* ---- MAIN CONTENT ---- */
+  .main-content {
+    position: relative; z-index: 10;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ---- CARD ---- */
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 28px;
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-md);
+  }
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--blue-200);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    width: 4px; height: 18px;
+    background: linear-gradient(var(--blue-300), var(--accent));
+    border-radius: 4px;
+  }
+
+  /* ---- TAB 1 LAYOUT ---- */
+  .creator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media(max-width: 768px) { .creator-grid { grid-template-columns: 1fr; } }
+
+  /* ---- COLOR PREVIEW ---- */
+  .preview-card { grid-column: span 2; }
+  @media(max-width: 768px) { .preview-card { grid-column: span 1; } }
+
+  .color-preview-big {
+    width: 100%;
+    height: 140px;
+    border-radius: var(--radius-sm);
+    background: #ff0000;
+    transition: background 0.15s ease;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .color-preview-big::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .preview-hex-label {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: white;
+  }
+
+  /* ---- SLIDERS ---- */
+  .slider-group { display: flex; flex-direction: column; gap: 18px; }
+  .slider-row { display: flex; flex-direction: column; gap: 6px; }
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue-200);
+  }
+  .slider-label span:last-child {
+    background: rgba(255,255,255,0.1);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: white;
+    min-width: 44px;
+    text-align: center;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 100px;
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 0 3px rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 0 4px rgba(255,255,255,0.3);
+  }
+
+  /* ---- COLOR PICKER ---- */
+  .picker-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  input[type=color] {
+    -webkit-appearance: none;
+    width: 80px; height: 80px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.15), 0 8px 25px rgba(0,0,0,0.4);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  input[type=color]::-webkit-color-swatch-wrapper { padding: 0; border-radius: 50%; }
+  input[type=color]::-webkit-color-swatch { border: none; border-radius: 50%; }
+  input[type=color]:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 5px rgba(59,130,246,0.5), 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .hex-input-wrap {
+    width: 100%;
+    position: relative;
+  }
+  .hex-prefix {
+    position: absolute;
+    right: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--blue-300);
+    font-weight: 800;
+    font-size: 1.1rem;
+    pointer-events: none;
+  }
+  .hex-input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm);
+    color: white;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    direction: ltr;
+  }
+  .hex-input:focus {
+    border-color: var(--blue-300);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+  }
+
+  /* ---- CODE BLOCKS ---- */
+  .codes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  @media(max-width: 600px) { .codes-grid { grid-template-columns: 1fr; } }
+
+  .code-block {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .code-block::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(59,130,246,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .code-block:hover::before { opacity: 1; }
+  .code-block:hover {
+    border-color: var(--blue-300);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59,130,246,0.25);
+  }
+  .code-block.copied {
+    border-color: #22c55e;
+    box-shadow: 0 0 20px rgba(34,197,94,0.3);
+  }
+  .code-block-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--blue-300);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .code-block-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: white;
+    word-break: break-all;
+    direction: ltr;
+  }
+  .code-block-hint {
+    font-size: 0.68rem;
+    color: var(--gray-400);
+    margin-top: 6px;
+  }
+  .copied-toast {
+    position: absolute;
+    inset: 0;
+    background: rgba(34,197,94,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+    border-radius: calc(var(--radius-sm) - 2px);
+  }
+  .code-block.copied .copied-toast { opacity: 1; }
+
+  /* ---- CMYK DETAIL ---- */
+  .cmyk-detail {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 4px;
+  }
+  @media(max-width: 500px) { .cmyk-detail { grid-template-columns: repeat(2, 1fr); } }
+  .cmyk-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .cmyk-item-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .cmyk-item-val {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: white;
+  }
+  .cmyk-item-pct {
+    font-size: 0.7rem;
+    color: var(--gray-400);
+    margin-top: 2px;
+  }
+  .cmyk-bar {
+    height: 4px;
+    border-radius: 10px;
+    margin-top: 8px;
+    transition: width 0.3s;
+  }
+
+  /* ---- HSL ROW ---- */
+  .hsl-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .hsl-item {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    text-align: center;
+  }
+  .hsl-item-label {
+    font-size: 0.7rem;
+    color: var(--blue-200);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .hsl-item-val { font-size: 1rem; font-weight: 800; color: white; }
+
+  /* ---- SAVE BUTTON ---- */
+  .save-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--blue-500), var(--blue-400));
+    border: none;
+    border-radius: var(--radius-sm);
+    color: white;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 15px rgba(37,99,176,0.4);
+    letter-spacing: 0.5px;
+  }
+  .save-btn:hover {
+    background: linear-gradient(135deg, var(--blue-400), var(--blue-300));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37,99,176,0.5);
+  }
+  .save-btn:active { transform: translateY(0); }
+
+  /* ---- HISTORY ---- */
+  .history-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .swatch {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.15);
+    transition: all 0.2s;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+  }
+  .swatch:hover {
+    transform: scale(1.15) translateY(-3px);
+    border-color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    z-index: 2;
+  }
+  .swatch-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.85);
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    direction: ltr;
+  }
+  .swatch:hover .swatch-tooltip { opacity: 1; }
+  .empty-history {
+    color: var(--gray-400);
+    font-size: 0.9rem;
+    font-style: italic;
+    padding: 12px 0;
+  }
+
+  /* ---- TAB 2 LAYOUT ---- */
+  .picker-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+    align-items: start;
+  }
+  @media(max-width: 900px) { .picker-layout { grid-template-columns: 1fr; } }
+
+  /* ---- DROP ZONE ---- */
+  .drop-zone {
+    border: 2.5px dashed rgba(59,130,246,0.4);
+    border-radius: var(--radius);
+    padding: 50px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.02);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--blue-300);
+    background: rgba(59,130,246,0.08);
+    box-shadow: 0 0 40px rgba(59,130,246,0.15);
+  }
+  .drop-icon {
+    width: 64px; height: 64px;
+    background: rgba(59,130,246,0.15);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .drop-icon svg { width: 32px; height: 32px; stroke: var(--blue-300); fill: none; stroke-width: 2; stroke-linecap: round; }
+  .drop-zone h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+  }
+  .drop-zone p { color: var(--gray-400); font-size: 0.88rem; }
+  .drop-zone small {
+    color: var(--blue-300);
+    font-size: 0.78rem;
+    background: rgba(59,130,246,0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* ---- IMAGE CANVAS AREA ---- */
+  .canvas-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: rgba(0,0,0,0.3);
+    cursor: crosshair;
+    border: 1px solid rgba(255,255,255,0.08);
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #imageCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 520px;
+    border-radius: var(--radius-sm);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* ---- MAGNIFIER ---- */
+  .magnifier {
+    position: fixed;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.4), 0 8px 30px rgba(0,0,0,0.6);
+    overflow: hidden;
+    pointer-events: none;
+    display: none;
+    z-index: 9999;
+    transform: translate(-50%, calc(-100% - 20px));
+  }
+  .magnifier-canvas { position: absolute; top: 0; left: 0; }
+  .magnifier-cross {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px; height: 16px;
+    pointer-events: none;
+  }
+  .magnifier-cross::before, .magnifier-cross::after {
+    content: ''; position: absolute; background: rgba(255,255,255,0.9);
+  }
+  .magnifier-cross::before { width: 1px; height: 100%; left: 50%; top: 0; }
+  .magnifier-cross::after { width: 100%; height: 1px; top: 50%; left: 0; }
+
+  /* ---- ZOOM CONTROLS ---- */
+  .zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.3);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+  }
+  .zoom-btn {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.07);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    font-family: monospace;
+    flex-shrink: 0;
+  }
+  .zoom-btn:hover { background: rgba(59,130,246,0.3); border-color: var(--blue-300); }
+  .zoom-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue-200);
+    min-width: 60px;
+    text-align: center;
+  }
+  .reset-zoom-btn {
+    margin-right: auto;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.07);
+    color: var(--blue-200);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-zoom-btn:hover { background: rgba(59,130,246,0.2); color: white; }
+  .zoom-hint {
+    font-size: 0.72rem;
+    color: var(--gray-400);
+  }
+
+  /* ---- LIVE COLOR DISPLAY ---- */
+  .live-color-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .live-preview-swatch {
+    width: 100%;
+    height: 100px;
+    border-radius: var(--radius-sm);
+    background: #cccccc;
+    transition: background 0.1s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .live-codes { display: flex; flex-direction: column; gap: 8px; }
+  .live-code-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    gap: 10px;
+  }
+  .live-code-row:hover {
+    border-color: var(--blue-300);
+    background: rgba(59,130,246,0.1);
+  }
+  .live-code-row.copied-row {
+    border-color: #22c55e;
+    background: rgba(34,197,94,0.1);
+  }
+  .live-code-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--blue-300);
+    letter-spacing: 1.5px;
+    flex-shrink: 0;
+  }
+  .live-code-value {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+    direction: ltr;
+    text-align: left;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .copy-icon { width: 16px; height: 16px; flex-shrink: 0; }
+  .copy-icon svg { width: 100%; height: 100%; stroke: var(--gray-400); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .capture-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #0f9470, #16a34a);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: white;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 15px rgba(22,163,74,0.35);
+  }
+  .capture-btn:hover {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(22,163,74,0.4);
+  }
+  .capture-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .no-image-msg {
+    color: var(--gray-400);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 30px 0;
+    font-style: italic;
+  }
+
+  /* ---- SCROLLBAR ---- */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+  /* ---- TOAST NOTIFICATION ---- */
+  #globalToast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(34,197,94,0.95);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    z-index: 99999;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    pointer-events: none;
+    font-family: 'Tajawal', sans-serif;
+    white-space: nowrap;
+  }
+  #globalToast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div id="globalToast"></div>
+<div class="magnifier" id="magnifier">
+  <canvas class="magnifier-canvas" id="magCanvas" width="120" height="120"></canvas>
+  <div class="magnifier-cross"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.1 0 2-.9 2-2 0-.54-.2-1.03-.52-1.41-.31-.37-.48-.85-.48-1.35 0-1.1.9-2 2-2h2.36c3.1 0 5.64-2.54 5.64-5.64C23 6.18 18.02 2 12 2zm-5 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm4-5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm5 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3 5c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+      </svg>
+    </div>
+    <h1>Mehdi Color Studio</h1>
+  </div>
+  <p>أداتك الاحترافية لتحليل الألوان وتركيبها</p>
+</header>
+
+<!-- TABS -->
+<div class="tabs-container">
+  <button class="tab-btn active" onclick="switchTab('creator')">منشئ اللون</button>
+  <button class="tab-btn" onclick="switchTab('picker')">ماصة الصورة</button>
+</div>
+
+<!-- MAIN -->
+<div class="main-content">
+
+  <!-- TAB 1: COLOR CREATOR -->
+  <div class="tab-panel active" id="tab-creator">
+    <div class="creator-grid">
+
+      <!-- PREVIEW -->
+      <div class="card preview-card">
+        <div class="card-title">معاينة اللون</div>
+        <div class="color-preview-big" id="bigPreview"></div>
+        <div class="preview-hex-label" id="previewHexLabel">#FF0000</div>
+      </div>
+
+      <!-- SLIDERS -->
+      <div class="card">
+        <div class="card-title">شرائط RGB</div>
+        <div class="slider-group">
+          <div class="slider-row">
+            <div class="slider-label">
+              <span>الأحمر (R)</span>
+              <span id="rVal">255</span>
+            </div>
+            <input type="range" id="rSlider" min="0" max="255" value="255" oninput="onSliderChange()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-label">
+              <span>الأخضر (G)</span>
+              <span id="gVal">0</span>
+            </div>
+            <input type="range" id="gSlider" min="0" max="255" value="0" oninput="onSliderChange()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-label">
+              <span>الأزرق (B)</span>
+              <span id="bVal">0</span>
+            </div>
+            <input type="range" id="bSlider" min="0" max="255" value="0" oninput="onSliderChange()">
+          </div>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 12px; align-items: center;">
+          <div class="picker-wrap" style="flex-shrink:0;">
+            <input type="color" id="colorWheel" value="#ff0000" oninput="onWheelChange()">
+          </div>
+          <div class="hex-input-wrap" style="flex: 1;">
+            <span class="hex-prefix">#</span>
+            <input type="text" class="hex-input" id="hexInput" value="FF0000" maxlength="6" oninput="onHexInput()" placeholder="FF0000">
+          </div>
+        </div>
+      </div>
+
+      <!-- CODES -->
+      <div class="card">
+        <div class="card-title">رموز اللون (انقر للنسخ)</div>
+        <div class="codes-grid">
+          <div class="code-block" id="hexBlock" onclick="copyCode('hex')">
+            <div class="copied-toast">تم النسخ!</div>
+            <div class="code-block-label">HEX</div>
+            <div class="code-block-value" id="hexCode">#FF0000</div>
+            <div class="code-block-hint">انقر للنسخ</div>
+          </div>
+          <div class="code-block" id="rgbBlock" onclick="copyCode('rgb')">
+            <div class="copied-toast">تم النسخ!</div>
+            <div class="code-block-label">RVB</div>
+            <div class="code-block-value" id="rgbCode">rgb(255, 0, 0)</div>
+            <div class="code-block-hint">انقر للنسخ</div>
+          </div>
+          <div class="code-block" id="cmykBlock" onclick="copyCode('cmyk')">
+            <div class="copied-toast">تم النسخ!</div>
+            <div class="code-block-label">CMJN</div>
+            <div class="code-block-value" id="cmykCode">0%, 100%, 100%, 0%</div>
+            <div class="code-block-hint">انقر للنسخ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CMYK DETAIL + HSL -->
+      <div class="card" style="grid-column: span 2;">
+        <div class="card-title">تفاصيل CMJN و HSL</div>
+        <div class="cmyk-detail">
+          <div class="cmyk-item">
+            <div class="cmyk-item-label" style="color:#06b6d4;">C — سماوي</div>
+            <div class="cmyk-item-val" id="cVal">0</div>
+            <div class="cmyk-item-pct">بالمئة</div>
+            <div class="cmyk-bar" id="cBar" style="background:#06b6d4; width:0%;"></div>
+          </div>
+          <div class="cmyk-item">
+            <div class="cmyk-item-label" style="color:#ec4899;">M — أرجواني</div>
+            <div class="cmyk-item-val" id="mVal">100</div>
+            <div class="cmyk-item-pct">بالمئة</div>
+            <div class="cmyk-bar" id="mBar" style="background:#ec4899; width:100%;"></div>
+          </div>
+          <div class="cmyk-item">
+            <div class="cmyk-item-label" style="color:#eab308;">J — أصفر</div>
+            <div class="cmyk-item-val" id="yVal">100</div>
+            <div class="cmyk-item-pct">بالمئة</div>
+            <div class="cmyk-bar" id="yBar" style="background:#eab308; width:100%;"></div>
+          </div>
+          <div class="cmyk-item">
+            <div class="cmyk-item-label" style="color:#94a3b8;">N — أسود</div>
+            <div class="cmyk-item-val" id="kVal">0</div>
+            <div class="cmyk-item-pct">بالمئة</div>
+            <div class="cmyk-bar" id="kBar" style="background:#94a3b8; width:0%;"></div>
+          </div>
+        </div>
+        <div class="hsl-row" style="margin-top:16px;">
+          <div class="hsl-item">
+            <div class="hsl-item-label">H — الصبغة</div>
+            <div class="hsl-item-val" id="hVal">0deg</div>
+          </div>
+          <div class="hsl-item">
+            <div class="hsl-item-label">S — التشبع</div>
+            <div class="hsl-item-val" id="sVal">100%</div>
+          </div>
+          <div class="hsl-item">
+            <div class="hsl-item-label">L — الإضاءة</div>
+            <div class="hsl-item-val" id="lVal">50%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAVE + HISTORY -->
+      <div class="card" style="grid-column: span 2;">
+        <div style="margin-bottom:16px;">
+          <button class="save-btn" onclick="saveColor()">حفظ اللون في السجل</button>
+        </div>
+        <div class="card-title">سجل الألوان المحفوظة</div>
+        <div class="history-grid" id="colorHistory">
+          <span class="empty-history">لا توجد ألوان محفوظة بعد</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 2: IMAGE PICKER -->
+  <div class="tab-panel" id="tab-picker">
+    <div class="picker-layout">
+
+      <!-- LEFT: Upload + Canvas -->
+      <div>
+        <!-- DROP ZONE -->
+        <div class="drop-zone" id="dropZone" onclick="triggerUpload()">
+          <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="onFileSelected(event)">
+          <div class="drop-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h3>ارفع صورتك هنا</h3>
+          <p>اسحب وأفلت أو انقر للاختيار</p>
+          <small>PNG, JPEG, WEBP مدعومة</small>
+        </div>
+
+        <!-- CANVAS AREA (hidden until image loaded) -->
+        <div id="canvasArea" style="display:none; margin-top:16px;">
+          <div class="zoom-controls">
+            <button class="zoom-btn" onclick="changeZoom(-0.25)" title="تصغير">-</button>
+            <div class="zoom-label" id="zoomLabel">100%</div>
+            <button class="zoom-btn" onclick="changeZoom(+0.25)" title="تكبير">+</button>
+            <button class="reset-zoom-btn" onclick="resetZoom()">اعادة التعيين</button>
+            <span class="zoom-hint">عجلة الفأرة للتكبير | Alt+سحب للتحريك</span>
+          </div>
+          <div class="canvas-wrap" id="canvasWrap"
+            onmousemove="onCanvasMouseMove(event)"
+            onmouseleave="onCanvasLeave()"
+            onclick="captureFromCanvas(event)"
+            onwheel="onCanvasWheel(event)">
+            <canvas id="imageCanvas"></canvas>
+          </div>
+          <p style="color:var(--gray-400); font-size:0.8rem; margin-top:8px; text-align:center;">
+            حرك الفأرة على الصورة لقراءة اللون — انقر لالتقاطه
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT: Live Color + History -->
+      <div>
+        <div class="live-color-box">
+          <div class="card-title" style="margin-bottom:0;">اللون الحالي</div>
+          <div class="live-preview-swatch" id="livePreviewSwatch"></div>
+
+          <div class="live-codes" id="liveCodes">
+            <div class="no-image-msg">ارفع صورة للبدء</div>
+          </div>
+
+          <button class="capture-btn" id="captureBtn" disabled onclick="captureCurrentLive()">
+            التقاط وحفظ هذا اللون
+          </button>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">الألوان الملتقطة</div>
+          <div class="history-grid" id="pickerHistory">
+            <span class="empty-history">لا توجد ألوان ملتقطة بعد</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===================== UTILITIES =====================
+
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0').toUpperCase()).join('');
+}
+
+function hexToRgb(hex) {
+  hex = hex.replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+  const n = parseInt(hex, 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+
+function rgbToCmyk(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const k = 1 - Math.max(r, g, b);
+  if (k === 1) return { c: 0, m: 0, y: 0, k: 100 };
+  return {
+    c: Math.round((1 - r - k) / (1 - k) * 100),
+    m: Math.round((1 - g - k) / (1 - k) * 100),
+    y: Math.round((1 - b - k) / (1 - k) * 100),
+    k: Math.round(k * 100)
+  };
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      default: h = ((r - g) / d + 4) / 6;
+    }
+  }
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+
+function showToast(msg, color = '#22c55e') {
+  const t = document.getElementById('globalToast');
+  t.textContent = msg;
+  t.style.background = color.startsWith('rgba') ? color : color + 'f0';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch { try { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); return true; } catch { return false; } }
+}
+
+// ===================== TAB SWITCHING =====================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ===================== TAB 1: COLOR CREATOR =====================
+let creatorR = 255, creatorG = 0, creatorB = 0;
+
+function updateSliderGradients() {
+  const r = creatorR, g = creatorG, b = creatorB;
+  document.getElementById('rSlider').style.background =
+    `linear-gradient(to left, rgb(255,${g},${b}), rgb(0,${g},${b}))`;
+  document.getElementById('gSlider').style.background =
+    `linear-gradient(to left, rgb(${r},255,${b}), rgb(${r},0,${b}))`;
+  document.getElementById('bSlider').style.background =
+    `linear-gradient(to left, rgb(${r},${g},255), rgb(${r},${g},0))`;
+}
+
+function updateCreatorUI() {
+  const r = creatorR, g = creatorG, b = creatorB;
+  const hex = rgbToHex(r, g, b);
+  const cmyk = rgbToCmyk(r, g, b);
+  const hsl = rgbToHsl(r, g, b);
+
+  // Sliders
+  document.getElementById('rSlider').value = r;
+  document.getElementById('gSlider').value = g;
+  document.getElementById('bSlider').value = b;
+  document.getElementById('rVal').textContent = r;
+  document.getElementById('gVal').textContent = g;
+  document.getElementById('bVal').textContent = b;
+  updateSliderGradients();
+
+  // Preview
+  document.getElementById('bigPreview').style.background = hex;
+  document.getElementById('previewHexLabel').textContent = hex;
+
+  // Wheel & hex
+  document.getElementById('colorWheel').value = hex;
+  document.getElementById('hexInput').value = hex.replace('#', '');
+
+  // Code blocks
+  document.getElementById('hexCode').textContent = hex;
+  document.getElementById('rgbCode').textContent = `rgb(${r}, ${g}, ${b})`;
+  document.getElementById('cmykCode').textContent = `${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%`;
+
+  // CMYK detail
+  document.getElementById('cVal').textContent = cmyk.c;
+  document.getElementById('mVal').textContent = cmyk.m;
+  document.getElementById('yVal').textContent = cmyk.y;
+  document.getElementById('kVal').textContent = cmyk.k;
+  document.getElementById('cBar').style.width = cmyk.c + '%';
+  document.getElementById('mBar').style.width = cmyk.m + '%';
+  document.getElementById('yBar').style.width = cmyk.y + '%';
+  document.getElementById('kBar').style.width = cmyk.k + '%';
+
+  // HSL
+  document.getElementById('hVal').textContent = hsl.h + 'deg';
+  document.getElementById('sVal').textContent = hsl.s + '%';
+  document.getElementById('lVal').textContent = hsl.l + '%';
+}
+
+function onSliderChange() {
+  creatorR = parseInt(document.getElementById('rSlider').value);
+  creatorG = parseInt(document.getElementById('gSlider').value);
+  creatorB = parseInt(document.getElementById('bSlider').value);
+  updateCreatorUI();
+}
+
+function onWheelChange() {
+  const hex = document.getElementById('colorWheel').value;
+  const rgb = hexToRgb(hex);
+  creatorR = rgb.r; creatorG = rgb.g; creatorB = rgb.b;
+  updateCreatorUI();
+}
+
+function onHexInput() {
+  let val = document.getElementById('hexInput').value.replace(/[^0-9a-fA-F]/g, '');
+  document.getElementById('hexInput').value = val;
+  if (val.length === 6) {
+    const rgb = hexToRgb(val);
+    creatorR = rgb.r; creatorG = rgb.g; creatorB = rgb.b;
+    updateCreatorUI();
+  }
+}
+
+let copyTimeout = {};
+async function copyCode(type) {
+  let text = '';
+  if (type === 'hex') text = document.getElementById('hexCode').textContent;
+  else if (type === 'rgb') text = document.getElementById('rgbCode').textContent;
+  else if (type === 'cmyk') text = document.getElementById('cmykCode').textContent;
+
+  const ok = await copyText(text);
+  if (ok) {
+    const blockId = type === 'hex' ? 'hexBlock' : type === 'rgb' ? 'rgbBlock' : 'cmykBlock';
+    const el = document.getElementById(blockId);
+    el.classList.add('copied');
+    showToast('تم نسخ ' + text);
+    clearTimeout(copyTimeout[type]);
+    copyTimeout[type] = setTimeout(() => el.classList.remove('copied'), 1800);
+  }
+}
+
+// ---- HISTORY ---- (no duplicate consecutive)
+let creatorHistory = [];
+
+function loadCreatorHistory() {
+  try { creatorHistory = JSON.parse(localStorage.getItem('mcs_creator_history') || '[]'); } catch { creatorHistory = []; }
+  renderCreatorHistory();
+}
+
+function saveColor() {
+  const hex = rgbToHex(creatorR, creatorG, creatorB);
+  // Check last color — no duplicate consecutive
+  if (creatorHistory.length > 0 && creatorHistory[creatorHistory.length - 1] === hex) {
+    showToast('هذا اللون محفوظ مسبقاً!', 'rgba(234,179,8,0.95)');
+    return;
+  }
+  creatorHistory.push(hex);
+  if (creatorHistory.length > 40) creatorHistory.shift();
+  localStorage.setItem('mcs_creator_history', JSON.stringify(creatorHistory));
+  renderCreatorHistory();
+  showToast('تم حفظ اللون ' + hex);
+}
+
+function renderCreatorHistory() {
+  const container = document.getElementById('colorHistory');
+  if (creatorHistory.length === 0) {
+    container.innerHTML = '<span class="empty-history">لا توجد ألوان محفوظة بعد</span>';
+    return;
+  }
+  container.innerHTML = '';
+  [...creatorHistory].reverse().forEach(hex => {
+    const sw = document.createElement('div');
+    sw.className = 'swatch';
+    sw.style.background = hex;
+    sw.title = hex;
+    sw.innerHTML = `<div class="swatch-tooltip">${hex}</div>`;
+    sw.onclick = () => {
+      const rgb = hexToRgb(hex);
+      creatorR = rgb.r; creatorG = rgb.g; creatorB = rgb.b;
+      updateCreatorUI();
+      showToast('تم تحميل اللون ' + hex, 'rgba(59,130,246,0.95)');
+    };
+    container.appendChild(sw);
+  });
+}
+
+// ===================== TAB 2: IMAGE PICKER =====================
+let imgLoaded = null;
+let offCanvas = null, offCtx = null;
+let zoomLevel = 1;
+let panX = 0, panY = 0;
+let isAltDragging = false;
+let altDragStart = null;
+let currentLiveRGB = null;
+let pickerHistory = [];
+
+function loadPickerHistory() {
+  try { pickerHistory = JSON.parse(localStorage.getItem('mcs_picker_history') || '[]'); } catch { pickerHistory = []; }
+  renderPickerHistory();
+}
+
+function triggerUpload() { document.getElementById('fileInput').click(); }
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.match(/image\/(png|jpeg|webp)/)) loadImageFile(file);
+});
+
+function onFileSelected(e) {
+  const file = e.target.files[0];
+  if (file) loadImageFile(file);
+}
+
+function loadImageFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      imgLoaded = img;
+      offCanvas = document.createElement('canvas');
+      offCanvas.width = img.width;
+      offCanvas.height = img.height;
+      offCtx = offCanvas.getContext('2d');
+      offCtx.drawImage(img, 0, 0);
+
+      zoomLevel = 1; panX = 0; panY = 0;
+      renderCanvasImage();
+
+      document.getElementById('dropZone').style.display = 'none';
+      document.getElementById('canvasArea').style.display = 'block';
+      document.getElementById('captureBtn').disabled = false;
+      updateZoomLabel();
+      showToast('تم رفع الصورة بنجاح', 'rgba(59,130,246,0.95)');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderCanvasImage() {
+  if (!imgLoaded) return;
+  const wrap = document.getElementById('canvasWrap');
+  const canvas = document.getElementById('imageCanvas');
+  const maxW = wrap.clientWidth || 600;
+  const maxH = 520;
+
+  const scale = Math.min(maxW / imgLoaded.width, maxH / imgLoaded.height, 1);
+  const dispW = Math.round(imgLoaded.width * scale * zoomLevel);
+  const dispH = Math.round(imgLoaded.height * scale * zoomLevel);
+
+  canvas.width = dispW;
+  canvas.height = dispH;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.clearRect(0, 0, dispW, dispH);
+  ctx.drawImage(imgLoaded, 0, 0, dispW, dispH);
+
+  canvas.style.position = 'relative';
+  canvas.style.left = panX + 'px';
+  canvas.style.top = panY + 'px';
+}
+
+function changeZoom(delta) {
+  zoomLevel = Math.max(0.25, Math.min(8, zoomLevel + delta));
+  renderCanvasImage();
+  updateZoomLabel();
+}
+
+function resetZoom() {
+  zoomLevel = 1; panX = 0; panY = 0;
+  renderCanvasImage();
+  updateZoomLabel();
+}
+
+function updateZoomLabel() {
+  document.getElementById('zoomLabel').textContent = Math.round(zoomLevel * 100) + '%';
+}
+
+function onCanvasWheel(e) {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? -0.15 : 0.15;
+  zoomLevel = Math.max(0.25, Math.min(8, zoomLevel + delta));
+  renderCanvasImage();
+  updateZoomLabel();
+}
+
+// Track Alt dragging for pan
+document.addEventListener('keydown', e => { if (e.key === 'Alt') isAltDragging = false; });
+document.addEventListener('keyup', e => { if (e.key === 'Alt') { isAltDragging = false; altDragStart = null; } });
+
+const canvasWrap = document.getElementById('canvasWrap');
+canvasWrap.addEventListener('mousedown', e => {
+  if (e.altKey || e.button === 1) {
+    isAltDragging = true;
+    altDragStart = { x: e.clientX - panX, y: e.clientY - panY };
+    e.preventDefault();
+  }
+});
+document.addEventListener('mouseup', () => { isAltDragging = false; altDragStart = null; });
+document.addEventListener('mousemove', e => {
+  if (isAltDragging && altDragStart) {
+    panX = e.clientX - altDragStart.x;
+    panY = e.clientY - altDragStart.y;
+    const canvas = document.getElementById('imageCanvas');
+    canvas.style.left = panX + 'px';
+    canvas.style.top = panY + 'px';
+  }
+});
+
+// ---- GET PIXEL FROM CANVAS POSITION ----
+function getPixelFromEvent(e) {
+  const canvas = document.getElementById('imageCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const x = Math.floor((e.clientX - rect.left) * (canvas.width / rect.width));
+  const y = Math.floor((e.clientY - rect.top) * (canvas.height / rect.height));
+  if (x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return null;
+  const ctx = canvas.getContext('2d');
+  const px = ctx.getImageData(x, y, 1, 1).data;
+  return { r: px[0], g: px[1], b: px[2] };
+}
+
+function onCanvasMouseMove(e) {
+  if (isAltDragging) return;
+  const px = getPixelFromEvent(e);
+  if (!px) { onCanvasLeave(); return; }
+
+  currentLiveRGB = px;
+  const hex = rgbToHex(px.r, px.g, px.b);
+  const cmyk = rgbToCmyk(px.r, px.g, px.b);
+
+  // Update live swatch
+  document.getElementById('livePreviewSwatch').style.background = hex;
+
+  // Update live codes
+  renderLiveCodes(hex, px, cmyk);
+
+  // Show magnifier
+  showMagnifier(e, hex);
+}
+
+function onCanvasLeave() {
+  document.getElementById('magnifier').style.display = 'none';
+}
+
+function renderLiveCodes(hex, rgb, cmyk) {
+  const codes = document.getElementById('liveCodes');
+  codes.innerHTML = '';
+  const items = [
+    { label: 'HEX', value: hex },
+    { label: 'RVB', value: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` },
+    { label: 'CMJN', value: `${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%` }
+  ];
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'live-code-row';
+    row.innerHTML = `
+      <span class="live-code-label">${item.label}</span>
+      <span class="live-code-value">${item.value}</span>
+      <span class="copy-icon"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+    `;
+    row.onclick = async () => {
+      await copyText(item.value);
+      row.classList.add('copied-row');
+      showToast('تم نسخ ' + item.value);
+      setTimeout(() => row.classList.remove('copied-row'), 1500);
+    };
+    codes.appendChild(row);
+  });
+}
+
+// ---- MAGNIFIER ----
+function showMagnifier(e, hex) {
+  const mag = document.getElementById('magnifier');
+  const magCanvas = document.getElementById('magCanvas');
+  mag.style.display = 'block';
+  mag.style.left = e.clientX + 'px';
+  mag.style.top = e.clientY + 'px';
+  mag.style.borderColor = hex;
+
+  if (!offCanvas) return;
+  const canvas = document.getElementById('imageCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const xRatio = offCanvas.width / rect.width;
+  const yRatio = offCanvas.height / rect.height;
+  const srcX = (e.clientX - rect.left) * xRatio;
+  const srcY = (e.clientY - rect.top) * yRatio;
+
+  const mCtx = magCanvas.getContext('2d');
+  const zoom = 5;
+  const srcW = magCanvas.width / zoom;
+  const srcH = magCanvas.height / zoom;
+  mCtx.clearRect(0, 0, 120, 120);
+  mCtx.imageSmoothingEnabled = false;
+  mCtx.drawImage(offCanvas,
+    srcX - srcW / 2, srcY - srcH / 2, srcW, srcH,
+    0, 0, 120, 120
+  );
+}
+
+// ---- CAPTURE COLOR ----
+function captureFromCanvas(e) {
+  if (isAltDragging) return;
+  const px = getPixelFromEvent(e);
+  if (!px) return;
+  currentLiveRGB = px;
+  captureCurrentLive();
+}
+
+function captureCurrentLive() {
+  if (!currentLiveRGB) return;
+  const { r, g, b } = currentLiveRGB;
+  const hex = rgbToHex(r, g, b);
+
+  // No duplicate consecutive
+  if (pickerHistory.length > 0 && pickerHistory[pickerHistory.length - 1] === hex) {
+    showToast('هذا اللون موجود بالفعل!', 'rgba(234,179,8,0.95)');
+    return;
+  }
+
+  pickerHistory.push(hex);
+  if (pickerHistory.length > 40) pickerHistory.shift();
+  localStorage.setItem('mcs_picker_history', JSON.stringify(pickerHistory));
+  renderPickerHistory();
+  showToast('تم حفظ اللون ' + hex);
+}
+
+function renderPickerHistory() {
+  const container = document.getElementById('pickerHistory');
+  if (pickerHistory.length === 0) {
+    container.innerHTML = '<span class="empty-history">لا توجد ألوان ملتقطة بعد</span>';
+    return;
+  }
+  container.innerHTML = '';
+  [...pickerHistory].reverse().forEach(hex => {
+    const sw = document.createElement('div');
+    sw.className = 'swatch';
+    sw.style.background = hex;
+    sw.innerHTML = `<div class="swatch-tooltip">${hex}</div>`;
+    sw.onclick = async () => {
+      await copyText(hex);
+      showToast('تم نسخ ' + hex, 'rgba(59,130,246,0.95)');
+    };
+    container.appendChild(sw);
+  });
+}
+
+// ===================== INIT =====================
+updateCreatorUI();
+loadCreatorHistory();
+loadPickerHistory();
+</script>
+</body>
+</html>
